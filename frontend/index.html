@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>AI Photo Vault</title>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-4xl font-bold mb-8">AI Photo Gallery</h1>
+    
+    <div class="bg-gray-800 p-8 rounded-lg shadow-xl border-2 border-dashed border-blue-500 w-96 text-center">
+        <input type="file" id="imageInput" class="hidden" accept="image/*">
+        <label for="imageInput" class="cursor-pointer block py-4 bg-blue-600 hover:bg-blue-700 rounded-md transition">
+            Select Photo to Classify
+        </label>
+        <div id="status" class="mt-4 text-sm text-gray-400">Ready for upload...</div>
+    </div>
+
+    <div id="gallery" class="mt-12 grid grid-cols-3 gap-4 px-4">
+        </div>
+
+    <script>
+        const input = document.getElementById('imageInput');
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            document.getElementById('status').innerText = "Uploading to Kubernetes Cluster...";
+            
+            // Logic to POST to our Go Backend
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            const res = await fetch('/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            console.log("AI Tags:", data);
+        };
+    </script>
+</body>
+</html>
